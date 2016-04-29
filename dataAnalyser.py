@@ -13,7 +13,7 @@ the measurements - min, max, median, average, stddev
 A graph is drawn for the first measurement, for 2208 points which is 4 orbits.
 
 You can scroll through the data by typing one of wasd then return, 
-a scrolls back 2000, d goes forward 2000 points, 
+a scrolls back 4 orbits, d goes forward 4 orbits, 
 w goes to the next measurement, s goes back to the previous measurement
 
 Measurements - in array Headers
@@ -56,27 +56,22 @@ Directory='C:/Users/jbelshaw/Desktop/Working/ISS/'
 #Filename='Columbus_Ed_astro_pi_datalog.csv'
 Filename='Node2_Izzy_astro_pi_datalog.csv'
 
-
 Headers=[]
 Arrays = []
 NL=0
 
-#FilePath = normpath(Directory+Filename)
-
-
 with open(os.path.normpath(Directory+Filename)) as file:
   for line in file:
     NL +=1
+    ns = line.split(",")
     if (NL==1):
-        headers=line.split(",")
+        headers= ns
         for h in headers:
             Headers.append(h)   
         Headers.pop(-1) # remove time stamp header as time is not a float
-    ns = line.split(",")
-    if (NL==1):
         for val in ns:
             empty=[]
-            Arrays.append(empty)   
+            Arrays.append(empty)  
     else:
         nv = 0
         for val in ns:
@@ -128,6 +123,8 @@ step = 2208 # 4 orbits
 while True:
     plt.cla()
     plt.ion()
+    plt.title(Headers[param])
+    axes.set_xlabel("minutes")
     print "plotting", n, "to", n+step, "for ", Headers[param]
     axes.plot(Arrays[0][n:(n+step)],Arrays[param][n:(n+step)] )  
     plt.show()
