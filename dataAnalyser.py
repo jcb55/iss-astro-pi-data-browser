@@ -83,21 +83,24 @@ with open(os.path.normpath(Directory+Filename)) as file:
             Arrays[nv].append(val)
             nv +=1
 file.close()
-
+rows = len(Arrays[0])
 
 nh=0
-print  " Measurement      #    min         max        median      average    stddev"
+print
+print " File", Filename, "  rows=", rows, rows/360, "hours"
+print
+print " Measurement      #    min         max        median      average    stddev"
 for h in Headers:
     narray = np.array(Arrays[nh]).astype(np.float32)
-    if (nh == 6):
+    if (Headers[nh] == "pitch"):
         # pitch seems to oscillate from close to zero to about 350 
         # so normalise it so it is close to zero
         nv = 0
         for val in narray:
-             if (val >= 300.0):
+             if (val >= 180.0):
                  narray[nv] = narray[nv]-360.0
                  #print val, narray[nv] 
-             if (val <= -300.0):
+             if (val <= -180.0):
                  narray[nv] = narray[nv] + 360.0
                  #print val, narray[nv] 
              nv +=1
@@ -142,6 +145,13 @@ while True:
         param = 1
     if (param >= len(Headers)-1):
         param = len(Headers)-1
+    if (n > rows ):
+        print "END of DATA SET, wrapping round to start"
+        n = 0
+    if (n < 0):
+        print "OVERSHOT Start of DATA SET, Wrapping round to end"
+        n = rows - step
+        
     
 
 
