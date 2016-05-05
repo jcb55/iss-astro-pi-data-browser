@@ -13,8 +13,10 @@ the measurements - min, max, median, average, stddev
 A graph is drawn for the first measurement, for 2208 points which is 4 orbits.
 
 You can scroll through the data by typing one of wasd then return, 
-a scrolls back 4 orbits, d goes forward 4 orbits, 
+a scrolls back, d goes forward 4 orbits, 
 w goes to the next measurement, s goes back to the previous measurement
+z reduces the number of data points by half, x doubles the number of  data points
+the statistics for what is displayed on the screen are printed
 
 Measurements - in array Headers
 0 ROW_ID
@@ -51,10 +53,23 @@ import mpl_toolkits.axisartist as AA
 import matplotlib.pyplot as plt
 import os 
 
-Directory='C:/Users/jbelshaw/Desktop/Working/ISS/' 
+#Directory='C:/Users/jbelshaw/Desktop/Working/ISS/' 
+Directory='' 
 #Filename='Columbus2_Ed_astro_pi_datalog.csv'
 #Filename='Columbus_Ed_astro_pi_datalog.csv'
 Filename='Node2_Izzy_astro_pi_datalog.csv'
+
+def printStats(param=1,n=0,step=2208):
+    print
+    print "Stats for", n, " to ", n+step
+    print " Measurement      #    min         max        median      average    stddev"
+    min = np.amin(Arrays[param][n:n+step])
+    max = np.amax(Arrays[param][n:n+step])
+    med = np.median(Arrays[param][n:n+step])
+    aver = np.amax(Arrays[param][n:n+step])
+    stddev = np.std(Arrays[param][n:n+step])
+    print "%12s %6s %10.5f %10.5f %10.5f %10.5f %10.5f" % ( Headers[param], param, min,max, med, aver, stddev)
+
 
 Headers=[]
 Arrays = []
@@ -120,6 +135,8 @@ axes = host_subplot(111, axes_class=AA.Axes)
 param = 1
 n = 0 
 step = 2208 # 4 orbits 
+minStep = 10
+maxStep = 20000
 while True:
     plt.cla()
     plt.ion()
@@ -128,7 +145,8 @@ while True:
     print "plotting", n, "to", n+step, "for ", Headers[param]
     axes.plot(Arrays[0][n:(n+step)],Arrays[param][n:(n+step)] )  
     plt.show()
-    keyPress = raw_input("WASD to navigate ")
+    printStats(param,n,step)
+    keyPress = raw_input("WASD to navigate, zx adjust scale ")
     if (keyPress == "w"): # w
         param +=1
     if (keyPress == "s" ): # s
@@ -137,6 +155,12 @@ while True:
         n -=step
     if (keyPress == "d"): # d
         n +=step
+    if (keyPress=="z"):
+        if (step >= minStep): 
+            step = int(step/2)
+    if (keyPress=="x"):
+        if (step <= maxStep):
+            step = int(step * 2)
     # Careful not to go outside of data arra, or plot the ROW_ID
     if (param <= 1):
         param = 1
