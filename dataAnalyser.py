@@ -57,7 +57,7 @@ import os
 Directory='' 
 #Filename='Columbus2_Ed_astro_pi_datalog.csv'
 #Filename='Columbus_Ed_astro_pi_datalog.csv'
-Filename='Node2_Izzy_astro_pi_datalog.csv'
+Filename='NewSC.csv'
 
 def printStats(param=1,n=0,step=2208):
     print
