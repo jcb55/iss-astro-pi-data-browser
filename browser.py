@@ -57,6 +57,8 @@ measurements (quite long!) and Arrays[6][0] is the first data point,
 Arrays[6][-1] is the last data point Arrays[0] is the ROW_ID/6  which is the 
 elapsed time in minutes Arrays[19] is the time stamp for that row.
 
+There is a data set in the file - 
+Columbus_Ed_astro_pi_datalog.csv.gz which should be uncompresssed before use
 
 """
 import numpy as np
